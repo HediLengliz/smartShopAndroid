@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/auth_provider.dart';
+import '../../providers/product_provider.dart';
+import '../products/products_screen.dart';
+import '../orders/orders_screen.dart';
+import '../lists/shopping_lists_screen.dart';
+import '../payments/payment_methods_screen.dart';
+import '../profile/profile_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -41,17 +47,17 @@ class HomeScreen extends StatelessWidget {
             ListTile(
               leading: const Icon(Icons.person_outline),
               title: const Text('Profile'),
-              onTap: () {},
+              onTap: () { Navigator.of(context).push(MaterialPageRoute(builder: (_) => const ProfileScreen())); },
             ),
             ListTile(
               leading: const Icon(Icons.shopping_bag_outlined),
               title: const Text('My Orders'),
-              onTap: () {},
+              onTap: () { Navigator.of(context).push(MaterialPageRoute(builder: (_) => const OrdersScreen())); },
             ),
             ListTile(
               leading: const Icon(Icons.list_alt_outlined),
               title: const Text('Shopping Lists'),
-              onTap: () {},
+              onTap: () { Navigator.of(context).push(MaterialPageRoute(builder: (_) => const ShoppingListsScreen())); },
             ),
             ListTile(
               leading: const Icon(Icons.location_on_outlined),
@@ -61,7 +67,7 @@ class HomeScreen extends StatelessWidget {
             ListTile(
               leading: const Icon(Icons.payment_outlined),
               title: const Text('Payment Methods'),
-              onTap: () {},
+              onTap: () { Navigator.of(context).push(MaterialPageRoute(builder: (_) => const PaymentMethodsScreen())); },
             ),
             const Divider(),
             ListTile(
@@ -102,61 +108,16 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: GridView.builder(
-              padding: const EdgeInsets.all(16),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                childAspectRatio: 0.75,
-                crossAxisSpacing: 16,
-                mainAxisSpacing: 16,
+            child: Center(
+              child: ElevatedButton.icon(
+                icon: const Icon(Icons.storefront_outlined),
+                label: const Text('Browse Products'),
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => const ProductsScreen()),
+                  );
+                },
               ),
-              itemCount: 6,
-              itemBuilder: (context, index) {
-                return Card(
-                  clipBehavior: Clip.antiAlias,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: Container(
-                          color: Colors.grey[200],
-                          child: const Center(
-                            child: Icon(
-                              Icons.shopping_basket,
-                              size: 48,
-                              color: Colors.grey,
-                            ),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Product ${index + 1}',
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              '\$${(index + 1) * 10}.99',
-                              style: TextStyle(
-                                color: Theme.of(context).colorScheme.primary,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              },
             ),
           ),
         ],

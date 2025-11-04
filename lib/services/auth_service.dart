@@ -37,6 +37,33 @@ class AuthService {
     }
   }
 
+  static Future<Map<String, dynamic>> resetPassword({
+    required String email,
+    required String token,
+    required String newPassword,
+  }) async {
+    try {
+      final response = await ApiService.post(
+        '${ApiConfig.authEndpoint}/reset-password',
+        {
+          'email': email,
+          'token': token,
+          'newPassword': newPassword,
+        },
+      );
+
+      return {
+        'success': true,
+        'message': response['message'] ?? 'Password reset successful',
+      };
+    } catch (e) {
+      return {
+        'success': false,
+        'message': e.toString().replaceAll('Exception: ', ''),
+      };
+    }
+  }
+
   static Future<Map<String, dynamic>> login({
     required String email,
     required String password,

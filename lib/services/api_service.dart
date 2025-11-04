@@ -38,10 +38,10 @@ class ApiService {
       final headers = await _getHeaders(includeAuth: requiresAuth);
       final response = await http
           .post(
-            Uri.parse(endpoint),
-            headers: headers,
-            body: jsonEncode(body),
-          )
+        Uri.parse(endpoint),
+        headers: headers,
+        body: jsonEncode(body),
+      )
           .timeout(ApiConfig.timeoutDuration);
 
       return _handleResponse(response);
@@ -56,10 +56,10 @@ class ApiService {
       final headers = await _getHeaders(includeAuth: requiresAuth);
       final response = await http
           .put(
-            Uri.parse(endpoint),
-            headers: headers,
-            body: jsonEncode(body),
-          )
+        Uri.parse(endpoint),
+        headers: headers,
+        body: jsonEncode(body),
+      )
           .timeout(ApiConfig.timeoutDuration);
 
       return _handleResponse(response);
@@ -74,10 +74,10 @@ class ApiService {
       final headers = await _getHeaders(includeAuth: requiresAuth);
       final response = await http
           .patch(
-            Uri.parse(endpoint),
-            headers: headers,
-            body: jsonEncode(body),
-          )
+        Uri.parse(endpoint),
+        headers: headers,
+        body: jsonEncode(body),
+      )
           .timeout(ApiConfig.timeoutDuration);
 
       return _handleResponse(response);
@@ -86,11 +86,15 @@ class ApiService {
     }
   }
 
+  // FIX: Removed the duplicate delete method that was here.
   static Future<dynamic> delete(String endpoint, {bool requiresAuth = false}) async {
     try {
       final headers = await _getHeaders(includeAuth: requiresAuth);
       final response = await http
-          .delete(Uri.parse(endpoint), headers: headers)
+          .delete(
+        Uri.parse(endpoint),
+        headers: headers,
+      )
           .timeout(ApiConfig.timeoutDuration);
 
       return _handleResponse(response);
