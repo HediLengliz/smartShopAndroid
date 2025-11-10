@@ -350,5 +350,19 @@ exports.handleChat = async (req, res) => {
   }
 };
 
+exports.resetChat = (req, res) => {
+  try {
+    const { sessionId } = req.body || {};
+    if (!sessionId) {
+      return res.status(400).json({ error: 'sessionId is required.' });
+    }
+    historyStore.delete(sessionId);
+    return res.json({ success: true });
+  } catch (error) {
+    console.error('[ChatController] Failed to reset chat session:', error);
+    return res.status(500).json({ error: 'Internal server error.' });
+  }
+};
+
 
 
