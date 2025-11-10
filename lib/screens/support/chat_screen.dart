@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../config/api_config.dart';
 
@@ -17,12 +18,17 @@ class _ChatScreenState extends State<ChatScreen> {
   final ScrollController _scrollController = ScrollController();
   final List<_ChatMessage> _messages = [];
   bool _isSending = false;
-  late final String _sessionId;
+  late String _sessionId;
+  SharedPreferences? _prefs;
+
+  static const String _storageMessagesKey = 'smartshop_chat_messages';
+  static const String _storageSessionKey = 'smartshop_chat_session';
 
   @override
   void initState() {
     super.initState();
-    _sessionId = UniqueKey().toString();
+    _sessionId = _generateSessionId();
+    _loadConversation();
   }
 
   @override
@@ -30,6 +36,55 @@ class _ChatScreenState extends State<ChatScreen> {
     _messageController.dispose();
     _scrollController.dispose();
     super.dispose();
+  }
+
+  String _generateSessionId() =>
+      DateTime.now().millisecondsSinceEpoch.toString();
+
+  Future<void> _loadConversation() async {
+    try {
+      _prefs ??= await SharedPreferences.getInstance();
+      final storedSession = _prefs?.getString(_storageSessionKey);
+      final storedMessages = _prefs?.getString(_storageMessagesKey);
+
+      if (storedSession != null && storedSession.isNotEmpty) {
+        _sessionId = storedSession;
+      } else {
+        await _prefs?.setString(_storageSessionKey, _sessionId);
+      }
+
+      if (storedMessages != null && storedMessages.isNotEmpty) {
+        final decoded = jsonDecode(storedMessages);
+        if (decoded is List) {
+          final restored = decoded
+              .whereType<Map<String, dynamic>>()
+              .map(_ChatMessage.fromJson)
+              .toList();
+          if (restored.isNotEmpty) {
+            setState(() {
+              _messages
+                ..clear()
+                ..addAll(restored);
+            });
+            _scrollToBottom();
+          }
+        }
+      }
+    } catch (e) {
+      debugPrint('Failed to load chat history: $e');
+    }
+  }
+
+  Future<void> _persistConversation() async {
+    try {
+      _prefs ??= await SharedPreferences.getInstance();
+      final encoded =
+          jsonEncode(_messages.map((message) => message.toJson()).toList());
+      await _prefs?.setString(_storageMessagesKey, encoded);
+      await _prefs?.setString(_storageSessionKey, _sessionId);
+    } catch (e) {
+      debugPrint('Failed to persist chat history: $e');
+    }
   }
 
   Future<void> _sendMessage() async {
@@ -42,6 +97,7 @@ class _ChatScreenState extends State<ChatScreen> {
       _messageController.clear();
     });
     _scrollToBottom();
+    await _persistConversation();
 
     try {
       final uri = Uri.parse(ApiConfig.chatEndpoint);
@@ -69,6 +125,7 @@ class _ChatScreenState extends State<ChatScreen> {
             ),
           );
         });
+        await _persistConversation();
       } else {
         setState(() {
           _messages.add(
@@ -78,6 +135,7 @@ class _ChatScreenState extends State<ChatScreen> {
             ),
           );
         });
+        await _persistConversation();
       }
     } catch (_) {
       if (!mounted) return;
@@ -89,10 +147,54 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
         );
       });
+      await _persistConversation();
     } finally {
       if (!mounted) return;
       setState(() => _isSending = false);
       _scrollToBottom();
+    }
+  }
+
+  Future<void> _clearConversation() async {
+    final previousSession = _sessionId;
+    setState(() {
+      _messages.clear();
+      _sessionId = _generateSessionId();
+    });
+    _scrollToBottom();
+    await _persistConversation();
+
+    try {
+      await http.post(
+        Uri.parse('${ApiConfig.chatEndpoint}/reset'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'sessionId': previousSession}),
+      );
+    } catch (e) {
+      debugPrint('Failed to reset chat session: $e');
+    }
+  }
+
+  Future<void> _confirmClearConversation() async {
+    final shouldClear = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Clear conversation?'),
+        content: const Text('This will remove the current chat history.'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(true),
+            child: const Text('Clear'),
+          ),
+        ],
+      ),
+    );
+    if (shouldClear == true) {
+      await _clearConversation();
     }
   }
 
@@ -116,6 +218,13 @@ class _ChatScreenState extends State<ChatScreen> {
         backgroundColor: const Color(0xFF16171A),
         title: const Text('SmartShop Assistant'),
         centerTitle: true,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.delete_outline),
+            tooltip: 'Clear conversation',
+            onPressed: _isSending ? null : _confirmClearConversation,
+          )
+        ],
       ),
       body: Column(
         children: [
@@ -203,6 +312,16 @@ class _ChatMessage {
     required this.content,
     required this.fromUser,
   });
+
+  factory _ChatMessage.fromJson(Map<String, dynamic> json) => _ChatMessage(
+        content: json['content'] as String? ?? '',
+        fromUser: json['fromUser'] as bool? ?? false,
+      );
+
+  Map<String, dynamic> toJson() => {
+        'content': content,
+        'fromUser': fromUser,
+      };
 }
 
 class _MessageBubble extends StatelessWidget {
