@@ -1,0 +1,184 @@
+{
+  "intents": [
+    {
+      "name": "greeting",
+      "examples": [
+        "hi",
+        "hello",
+        "hey there",
+        "good morning",
+        "good afternoon",
+        "hello smartshop",
+        "hi assistant"
+      ]
+    },
+    {
+      "name": "goodbye",
+      "examples": [
+        "bye",
+        "thanks that's all",
+        "see you",
+        "talk later",
+        "goodbye",
+        "that's it for now",
+        "catch you later"
+      ]
+    },
+    {
+      "name": "help_overview",
+      "examples": [
+        "what can you do",
+        "how does this app work",
+        "help me understand smartshop",
+        "what features are available",
+        "tell me about smartshop",
+        "how can you assist",
+        "what services do you offer"
+      ]
+    },
+    {
+      "name": "browse_category",
+      "examples": [
+        "show me dairy products",
+        "browse electronics",
+        "look at produce items",
+        "find household supplies",
+        "show baby care category",
+        "browse snacks",
+        "display personal care items"
+      ]
+    },
+    {
+      "name": "search_product",
+      "examples": [
+        "find almond milk",
+        "search for red shoes",
+        "look up organic apples",
+        "do you have oat milk",
+        "search product coffee beans",
+        "find gluten free bread",
+        "search chocolate bars"
+      ]
+    },
+    {
+      "name": "recommendations",
+      "examples": [
+        "what's popular",
+        "recommend breakfast items",
+        "suggest something for dinner",
+        "show trending products",
+        "any deals today",
+        "recommend snacks",
+        "what do people buy most"
+      ]
+    },
+    {
+      "name": "create_list",
+      "examples": [
+        "create a list called groceries",
+        "make a new list weekend party",
+        "start a list holiday shopping",
+        "create list travel essentials",
+        "open a list named office",
+        "new list cleaning supplies",
+        "make list camping trip"
+      ]
+    },
+    {
+      "name": "add_to_list",
+      "examples": [
+        "add 2kg apples and milk to groceries",
+        "put eggs in my list",
+        "add bread to holiday shopping list",
+        "include cereal in groceries",
+        "add bananas to weekend party list",
+        "insert coffee into office list",
+        "add toothpaste to travel essentials"
+      ]
+    },
+    {
+      "name": "update_item_status",
+      "examples": [
+        "mark apples as purchased",
+        "i bought milk",
+        "set eggs to pending",
+        "mark cereal not purchased",
+        "check off bananas from groceries",
+        "set coffee as bought",
+        "mark bread as done"
+      ]
+    },
+    {
+      "name": "cart_add",
+      "examples": [
+        "add 3 bananas to my cart",
+        "put this product in my cart",
+        "add almond milk to cart",
+        "place cereal in cart",
+        "add toothpaste to cart",
+        "put eggs into my cart",
+        "add item number 1234 to cart"
+      ]
+    },
+    {
+      "name": "order_status",
+      "examples": [
+        "where is my order 12345",
+        "track my last order",
+        "what's the status of order 789",
+        "is my delivery on the way",
+        "track order placed yesterday",
+        "status of recent purchase",
+        "check order number 4567"
+      ]
+    },
+    {
+      "name": "payments_help",
+      "examples": [
+        "how do i add a payment method",
+        "change my default card",
+        "update billing address",
+        "how to remove a saved card",
+        "set new payment option",
+        "add new credit card",
+        "edit my payment settings"
+      ]
+    },
+    {
+      "name": "notifications_settings",
+      "examples": [
+        "turn off promotions",
+        "remind me about expiring coupons",
+        "mute order alerts",
+        "enable delivery notifications",
+        "how to manage notifications",
+        "set promo alerts to weekly",
+        "stop marketing emails"
+      ]
+    },
+    {
+      "name": "faq_support",
+      "examples": [
+        "how do refunds work",
+        "app crashed help",
+        "why was i charged twice",
+        "how to contact support",
+        "need help with app issue",
+        "explain return policy",
+        "where is the help center"
+      ]
+    },
+    {
+      "name": "unknown_fallback",
+      "examples": [
+        "tell me a joke",
+        "what's the weather",
+        "book me a flight",
+        "convert 10 usd to eur",
+        "who won the game",
+        "play some music",
+        "set an alarm"
+      ]
+    }
+  ]
+}

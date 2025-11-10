@@ -22,6 +22,7 @@ const orderRoutes = require('./routes/orders');
 const shoppingListRoutes = require('./routes/shoppingLists');
 const paymentRoutes = require('./routes/payments');
 const profileRoutes = require('./routes/profile');
+const chatRoutes = require('./routes/chat');
 
 // Email verification page at root level (email links use /verify, not /api/auth/verify)
 app.get('/verify', async (req, res) => {
@@ -207,6 +208,7 @@ app.use('/api/orders', orderRoutes);
 app.use('/api/shopping-lists', shoppingListRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/profile', profileRoutes);
+app.use('/api/chat', chatRoutes);
 
 // Root endpoint
 app.get('/', (req, res) => {
