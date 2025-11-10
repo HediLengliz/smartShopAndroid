@@ -16,6 +16,7 @@ class ApiConfig {
   static const String shoppingListsEndpoint = '$baseUrl/shopping-lists';
   static const String paymentsEndpoint = '$baseUrl/payments';
   static const String profileEndpoint = '$baseUrl/profile';
+  static const String chatEndpoint = '$baseUrl/chat';
   
   static const Duration timeoutDuration = Duration(seconds: 30);
 }

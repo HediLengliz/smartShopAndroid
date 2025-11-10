@@ -16,6 +16,7 @@ import 'screens/cart/cart_screen.dart';
 import 'screens/profile/profile_screen.dart';
 import 'screens/notifications/notifications_screen.dart';
 import 'services/auth_service.dart';
+import 'screens/support/chat_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -142,6 +143,7 @@ class _MyAppState extends State<MyApp> {
           '/cart': (context) => const CartScreen(),
           '/profile': (context) => const ProfileScreen(),
           '/notifications': (context) => const NotificationsScreen(),
+          '/support/chat': (context) => const ChatScreen(),
         },
       ),
     );

@@ -182,6 +182,8 @@ class HomeTemplate extends StatelessWidget {
               builder: (context) => const ShoppingListsScreen(),
             ),
           );
+        } else if (label == 'Help & Support') {
+          Navigator.pushNamed(context, '/support/chat');
         }
         // Add other navigation handlers here as needed
       },
